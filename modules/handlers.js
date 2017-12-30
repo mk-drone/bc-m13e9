@@ -7,15 +7,25 @@ exports.upload = (req, resp)=>{
     form.parse(req, (err, fields, files)=>{
         if(!err && files.upload){
             fs.renameSync(files.upload.path, `C:/upload/${files.upload.name}`); //cross device link error fix
-            resp.setHeader('Content-Type', 'text/html');
-            resp.write('received image:<br/>');
-            resp.write(`<img src="/show?name=${files.upload.name}">`);
-            resp.end()
+            fs.readFile('./templates/upload.html', 'utf-8', (err, data)=>{
+                resp.setHeader('Content-Type', 'text/html');
+                if(!err){
+                    data = data.replace('$$uri$$', `/show?name=${files.upload.name}`);
+                    data = data.replace('$$filename$$', `${files.upload.name}`);
+                    data = data.replace('$$filesize$$', `${(files.upload.size/1024).toFixed(2)} KB`);
+                    data = data.replace('$$filetype$$', `${files.upload.type}`);
+                    resp.write(data);
+                }else{
+                    console.log("upload error: ",err);
+                    resp.write('error reading upload template');
+                }
+                resp.end()
+            });            
         }else{
             console.log("error:",err);
             resp.write('error parsing form');
+            resp.end();
         }
-        resp.end();
     });
 }
 
@@ -34,7 +44,7 @@ exports.welcome = (req, resp)=>{
 }
 
 exports.error = (req, resp)=>{
-    console.log('error display');
+    console.log('routing error/unknown endpoint');
     resp.write('404 - not found');
     resp.end()
 }
@@ -52,4 +62,17 @@ exports.show = (req, resp)=>{
         }
         resp.end();
     })
+}
+
+exports.styles = (req, resp) => {
+    console.log('serving styles');
+    fs.readFile('./styles.css', 'utf-8', (err, data)=>{
+        if(!err){
+            resp.write(data);
+        }else{
+            console.log('style read error:',err);
+            resp.write();
+        }
+        resp.end();
+    });
 }
