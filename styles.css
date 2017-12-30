@@ -1,0 +1,41 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: rgb(11, 145, 185);
+    text-align:center;
+    margin: 0 auto;
+}
+
+label {
+    float:left;
+    width: 50%;
+    font-size: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: normal;
+    line-height:20px;
+}
+input {
+    width: 50%;
+}
+
+input[type="submit"]{
+    margin-top:10px;
+}
+
+.uploaded {
+    border: 1px solid black;
+    display: block;
+}
+
+h1, p {
+    font-size: 10px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-style: normal;
+}
+
+h1 {
+    font-size: 15px;
+    font-style: italic;
+}
