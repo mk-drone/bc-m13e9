@@ -6,7 +6,7 @@ exports.upload = (req, resp)=>{
     let form = new formidable.IncomingForm();
     form.parse(req, (err, fields, files)=>{
         if(!err && files.upload){
-            fs.renameSync(files.upload.path, `C:/upload/${files.upload.name}`); //cross device link error fix
+            fs.renameSync(files.upload.path, `./uploads/${files.upload.name}`); //cross device link error fix
             fs.readFile('./templates/upload.html', 'utf-8', (err, data)=>{
                 resp.setHeader('Content-Type', 'text/html');
                 if(!err){
@@ -52,7 +52,7 @@ exports.error = (req, resp)=>{
 exports.show = (req, resp)=>{
     console.log('image request');
     let name = require('url').parse(req.url, true).query.name;
-    fs.readFile(`C:/upload/${name}`, 'binary', (err, data)=>{
+    fs.readFile(`./uploads/${name}`, 'binary', (err, data)=>{
         if(!err){
             resp.setHeader('Content-Type', 'image/jpg');
             resp.write(data, 'binary');
